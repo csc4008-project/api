@@ -13,8 +13,8 @@ public class BookingController {
 
     @CrossOrigin
     @GetMapping("/booking")
-    public Booking getBooking(@RequestParam(value = "userId") String bookingId)
+    public Booking getBooking(@RequestParam(value = "userId") int bookingId, int employeeId, int roomId,  int deskId, java.sql.Timestamp startTime, int duration)
     {
-        return new Booking(bookingId);
+        return new Booking(bookingId, employeeId, roomId, deskId, startTime, duration);
     }
 }
