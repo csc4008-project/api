@@ -14,6 +14,9 @@ public class Building {
     @Column(name="building_name")
     private String buildingName;
 
+    @Column(name="building_short_code")
+    private String buildingShortCode;
+
     @Column(name="address_line1")
     private String addressLine1;
 
@@ -32,9 +35,9 @@ public class Building {
     @Column(name="country")
     private String country;
 
-    public Building(int buildingId, String buildingName, String addressLine1, String addressLine2, String postcode, String city, String county, String country) {
-        this.buildingId = buildingId;
+    public Building(String buildingName, String buildingShortCode, String addressLine1, String addressLine2, String postcode, String city, String county, String country) {
         this.buildingName = buildingName;
+        this.buildingShortCode = buildingShortCode;
         this.addressLine1 = addressLine1;
         this.addressLine2 = addressLine2;
         this.postcode = postcode;
@@ -61,6 +64,14 @@ public class Building {
 
     public void setBuildingName(String buildingName) {
         this.buildingName = buildingName;
+    }
+
+    public String getBuildingShortCode() {
+        return buildingShortCode;
+    }
+
+    public void setBuildingShortCode(String buildingShortCode) {
+        this.buildingShortCode = buildingShortCode;
     }
 
     public String getAddressLine1() {
@@ -116,6 +127,7 @@ public class Building {
         return "Building{" +
                 "buildingId=" + buildingId +
                 ", buildingName='" + buildingName + '\'' +
+                ", buildingShortCode='" + buildingShortCode + '\'' +
                 ", addressLine1='" + addressLine1 + '\'' +
                 ", addressLine2='" + addressLine2 + '\'' +
                 ", postcode='" + postcode + '\'' +

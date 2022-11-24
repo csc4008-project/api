@@ -14,15 +14,6 @@ public class Booking {
     @Column(name="booking_id")
     private int bookingId;
 
-    @Column(name="employee_id")
-    private int employeeId;
-
-    @Column(name="room_id")
-    private Integer roomId;
-
-    @Column(name="desk_id")
-    private Integer deskId;
-
     @Column(name="start_time")
     private java.sql.Timestamp startTime;
 
@@ -41,11 +32,10 @@ public class Booking {
     @JoinColumn(name = "employee_id", insertable=false, updatable=false)
     private Employee employee;
 
-    public Booking(int bookingId, int employeeId, Integer roomId, Integer deskId, java.sql.Timestamp startTime, int duration) {
-        this.bookingId = bookingId;
-        this.employeeId = employeeId;
-        this.roomId = roomId;
-        this.deskId = deskId;
+    public Booking(Employee employee, Room room, Desk desk, java.sql.Timestamp startTime, int duration) {
+        this.employee = employee;
+        this.room = room;
+        this.desk = desk;
         this.startTime = startTime;
         this.duration = duration;
     }
@@ -60,30 +50,6 @@ public class Booking {
 
     public void setBookingId(int bookingId) {
         this.bookingId = bookingId;
-    }
-
-    public int getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(int employeeId) {
-        this.employeeId = employeeId;
-    }
-
-    public Integer getRoomId() {
-        return roomId;
-    }
-
-    public void setRoomId(int roomId) {
-        this.roomId = roomId;
-    }
-
-    public Integer getDeskId() {
-        return deskId;
-    }
-
-    public void setDeskId(int deskId) {
-        this.deskId = deskId;
     }
 
     public Timestamp getStartTime() {
@@ -102,10 +68,120 @@ public class Booking {
         this.duration = duration;
     }
 
+    public Room getRoom() {
+        return room;
+    }
+
+    public Desk getDesk() {
+        return desk;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public void setDesk(Desk desk) {
+        this.desk = desk;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
     @Override
     public String toString() {
-        return "Booking: {" + "bookingId=" + bookingId +  ", employeeId=" + employeeId + ", roomId=" + roomId
-                +  ", deskId=" + deskId +  ", startTime=" + startTime + ", duration=" + duration +'}';
+        return "Booking: {" + "bookingId=" + bookingId +  ", employeeId=" + employee.getEmployeeId() + ", roomId=" + room.getRoomId()
+                +  ", deskId=" + desk.getDeskId() +  ", startTime=" + startTime + ", duration=" + duration +'}';
+    }
+
+    // ---- Room Details Methods
+    public String getRoomNumber() {
+        return room.getRoomNumber();
+    }
+
+    public String getRoomType() {
+        return room.getRoomType();
+    }
+
+    public int getRoomCapacity() {
+        return room.getCapacity();
+    }
+
+    // ---- Desk Details Methods
+    public String getDeskName() {
+        return desk.getDeskName();
+    }
+
+    // ---- Space Details Methods
+    public String getSpaceName() {
+        return desk.getSpace().getSpaceName();
+    }
+
+    public String getSpaceType() {
+        return desk.getSpace().getSpaceType();
+    }
+
+    public int getSpaceDeskCapacity() {
+        return desk.getSpace().getDeskCapacity();
+    }
+
+    // ---- Floor Details Methods
+    public int getFloorNumber() {
+        if (room == null) {
+            return desk.getSpace().getFloor().getFloorNumber();
+        } else if (desk == null) {
+            return room.getFloor().getFloorNumber();
+        }
+        return 0;
+    }
+
+    // ---- Building Details Methods
+    public String getBuildingDetails() {
+        if (room == null) {
+            return desk.getSpace().getFloor().getBuilding().getBuildingName() + ", " +
+                    desk.getSpace().getFloor().getBuilding().getBuildingShortCode() + ", " +
+                    desk.getSpace().getFloor().getBuilding().getAddressLine1() + ", " +
+                    desk.getSpace().getFloor().getBuilding().getAddressLine2() + ", " +
+                    desk.getSpace().getFloor().getBuilding().getPostcode() + ", " +
+                    desk.getSpace().getFloor().getBuilding().getCity() + ", " +
+                    desk.getSpace().getFloor().getBuilding().getCounty() + ", " +
+                    desk.getSpace().getFloor().getBuilding().getCountry();
+        } else if (desk == null) {
+            return room.getFloor().getBuilding().getBuildingName() + ", " +
+                    room.getFloor().getBuilding().getBuildingShortCode() + ", " +
+                    room.getFloor().getBuilding().getAddressLine1() + ", " +
+                    room.getFloor().getBuilding().getAddressLine2() + ", " +
+                    room.getFloor().getBuilding().getPostcode() + ", " +
+                    room.getFloor().getBuilding().getCity() + ", " +
+                    room.getFloor().getBuilding().getCounty() + ", " +
+                    room.getFloor().getBuilding().getCountry();
+        }
+        return "error";
+    }
+
+    // ---- Employee Details Methods
+    public int getEmployeeId() {
+        return employee.getEmployeeId();
+    }
+
+    public String getEmployeeFirstName() {
+        return employee.getFirstName();
+    }
+
+    public String getEmployeeLastName() {
+        return employee.getLastName();
+    }
+
+    public String getEmployeeOccupation() {
+        return employee.getOccupation();
+    }
+
+    public String getEmployeeEmail() {
+        return employee.getEmail();
     }
 
 }

@@ -11,9 +11,6 @@ public class Space {
     @Column(name="space_id")
     private int spaceId;
 
-    @Column(name="floor_id")
-    private int floorId;
-
     @Column(name="space_name")
     private String spaceName;
 
@@ -27,9 +24,8 @@ public class Space {
     @JoinColumn(name = "floor_id", insertable=false, updatable=false)
     private Floor floor;
 
-    public Space(int spaceId, int floorId, String spaceName, String spaceType, int deskCapacity) {
-        this.spaceId = spaceId;
-        this.floorId = floorId;
+    public Space(Floor floor, String spaceName, String spaceType, int deskCapacity) {
+        this.floor = floor;
         this.spaceName = spaceName;
         this.spaceType = spaceType;
         this.deskCapacity = deskCapacity;
@@ -45,14 +41,6 @@ public class Space {
 
     public void setSpaceId(int spaceId) {
         this.spaceId = spaceId;
-    }
-
-    public int getFloorId() {
-        return floorId;
-    }
-
-    public void setFloorId(int floorId) {
-        this.floorId = floorId;
     }
 
     public String getSpaceName() {
@@ -79,11 +67,19 @@ public class Space {
         this.deskCapacity = deskCapacity;
     }
 
+    public Floor getFloor() {
+        return floor;
+    }
+
+    public void setFloor(Floor floor) {
+        this.floor = floor;
+    }
+
     @Override
     public String toString() {
         return "Space{" +
                 "spaceId=" + spaceId +
-                ", floorId=" + floorId +
+                ", floorId=" + floor.getFloorId() +
                 ", spaceName='" + spaceName + '\'' +
                 ", spaceType='" + spaceType + '\'' +
                 ", deskCapacity=" + deskCapacity +

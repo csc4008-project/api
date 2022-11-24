@@ -1,6 +1,7 @@
 package com.csc4003.apis.models;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name="attendee")
@@ -10,12 +11,6 @@ public class Attendee {
     @Column(name="attendee_id")
     private int attendeeId;
 
-    @Column(name="booking_id")
-    private int bookingId;
-
-    @Column(name="employee_id")
-    private int employeeId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booking_id", insertable=false, updatable=false)
     private Booking booking;
@@ -24,10 +19,9 @@ public class Attendee {
     @JoinColumn(name = "employee_id", insertable=false, updatable=false)
     private Employee employee;
 
-    public Attendee(int attendeeId, int bookingId, int employeeId) {
-        this.attendeeId = attendeeId;
-        this.bookingId = bookingId;
-        this.employeeId = employeeId;
+    public Attendee(Booking booking, Employee employee) {
+        this.booking = booking;
+        this.employee = employee;
     }
 
     public Attendee() {
@@ -42,28 +36,49 @@ public class Attendee {
         this.attendeeId = attendeeId;
     }
 
-    public int getBookingId() {
-        return bookingId;
+    public Booking getBooking() {
+        return booking;
     }
 
-    public void setBookingId(int bookingId) {
-        this.bookingId = bookingId;
+    public void setBooking(Booking booking) {
+        this.booking = booking;
     }
 
-    public int getEmployeeId() {
-        return employeeId;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setEmployeeId(int employeeId) {
-        this.employeeId = employeeId;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     @Override
     public String toString() {
         return "Attendee{" +
                 "attendeeId=" + attendeeId +
-                ", bookingId=" + bookingId +
-                ", employeeId=" + employeeId +
+                ", bookingId=" + booking.getBookingId() +
+                ", employeeId=" + employee.getEmployeeId() +
                 '}';
+    }
+
+    // ---- Employee Details Methods
+    public int getEmployeeId() {
+        return employee.getEmployeeId();
+    }
+
+    public String getEmployeeFirstName() {
+        return employee.getFirstName();
+    }
+
+    public String getEmployeeLastName() {
+        return employee.getLastName();
+    }
+
+    public String getEmployeeOccupation() {
+        return employee.getOccupation();
+    }
+
+    public String getEmployeeEmail() {
+        return employee.getEmail();
     }
 }

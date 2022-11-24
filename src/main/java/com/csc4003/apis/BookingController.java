@@ -1,6 +1,7 @@
 package com.csc4003.apis;
 
 import com.csc4003.apis.models.Booking;
+import com.csc4003.apis.models.Room;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,8 +14,9 @@ public class BookingController {
 
     @CrossOrigin
     @GetMapping("/booking")
-    public Booking getBooking(@RequestParam(value = "userId") int bookingId, int employeeId, int roomId,  int deskId, java.sql.Timestamp startTime, int duration)
+    public String getBooking(@RequestParam(value = "userId") String test)
     {
-        return new Booking(bookingId, employeeId, roomId, deskId, startTime, duration);
+        return test;
+        //return new Booking(bookingId, employeeId, room, deskId, startTime, duration);
     }
 }

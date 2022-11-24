@@ -11,24 +11,16 @@ public class Floor {
     @Column(name="floor_id")
     private int floorId;
 
-    @Column(name="building_id")
-    private int buildingId;
-
     @Column(name="floor_number")
     private int floorNumber;
-
-    @Column(name="floor_name")
-    private String floorName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "building_id", insertable=false, updatable=false)
     private Building building;
 
-    public Floor(int floorId, int buildingId, int floorNumber, String floorName) {
-        this.floorId = floorId;
-        this.buildingId = buildingId;
+    public Floor(Building building, int floorNumber) {
+        this.building = building;
         this.floorNumber = floorNumber;
-        this.floorName = floorName;
     }
 
     public Floor() {
@@ -43,14 +35,6 @@ public class Floor {
         this.floorId = floorId;
     }
 
-    public int getBuildingId() {
-        return buildingId;
-    }
-
-    public void setBuildingId(int buildingId) {
-        this.buildingId = buildingId;
-    }
-
     public int getFloorNumber() {
         return floorNumber;
     }
@@ -59,21 +43,20 @@ public class Floor {
         this.floorNumber = floorNumber;
     }
 
-    public String getFloorName() {
-        return floorName;
+    public Building getBuilding() {
+        return building;
     }
 
-    public void setFloorName(String floorName) {
-        this.floorName = floorName;
+    public void setBuilding(Building building) {
+        this.building = building;
     }
 
     @Override
     public String toString() {
         return "Floor{" +
                 "floorId=" + floorId +
-                ", buildingId=" + buildingId +
+                ", buildingId=" + building.getBuildingId() +
                 ", floorNumber=" + floorNumber +
-                ", floorName='" + floorName + '\'' +
                 '}';
     }
 }

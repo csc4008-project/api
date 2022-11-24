@@ -11,23 +11,15 @@ public class Desk {
     @Column(name="desk_id")
     private int deskId;
 
-    @Column(name="space_id")
-    private int spaceId;
-
     @Column(name="desk_name")
     private String deskName;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "floor_id")
-    private Floor floor;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "space_id")
+    @JoinColumn(name = "space_id", insertable=false, updatable=false)
     private Space space;
 
-    public Desk(int deskId, int spaceId, String deskName) {
-        this.deskId = deskId;
-        this.spaceId = spaceId;
+    public Desk(Space space, String deskName) {
+        this.space = space;
         this.deskName = deskName;
     }
 
@@ -43,14 +35,6 @@ public class Desk {
         this.deskId = deskId;
     }
 
-    public int getSpaceId() {
-        return spaceId;
-    }
-
-    public void setSpaceId(int spaceId) {
-        this.spaceId = spaceId;
-    }
-
     public String getDeskName() {
         return deskName;
     }
@@ -59,11 +43,19 @@ public class Desk {
         this.deskName = deskName;
     }
 
+    public Space getSpace() {
+        return space;
+    }
+
+    public void setSpace(Space space) {
+        this.space = space;
+    }
+
     @Override
     public String toString() {
         return "Desk{" +
                 "deskId=" + deskId +
-                ", spaceId=" + spaceId +
+                ", spaceId=" + space.getSpaceId() +
                 ", deskName='" + deskName + '\'' +
                 '}';
     }
