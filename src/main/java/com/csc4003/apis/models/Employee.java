@@ -21,8 +21,7 @@ public class Employee {
     @Column(name="password")
     private String password;
 
-    public Employee(int employeeId, String firstName, String lastName,  String occupation, String email, String password) {
-        this.employeeId = employeeId;
+    public Employee(String firstName, String lastName,  String occupation, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.occupation = occupation;
@@ -84,7 +83,7 @@ public class Employee {
 
     @Override
     public String toString() {
-        return "Employee: {" + "id=" + employeeId +  ", firstName=" + firstName + ", lastName=" + lastName
+        return "Employee: {" + "employeeId=" + employeeId +  ", firstName=" + firstName + ", lastName=" + lastName
                  +  ", occupation=" + occupation +  ", email=" + email + '}';
     }
 }

@@ -11,11 +11,8 @@ public class Room {
     @Column(name="room_id")
     private int roomId;
 
-    @Column(name="floor_id")
-    private int floorId;
-
-    @Column(name="room_name")
-    private String roomName;
+    @Column(name="room_number")
+    private String roomNumber;
 
     @Column(name="room_type")
     private String roomType;
@@ -27,10 +24,9 @@ public class Room {
     @JoinColumn(name = "floor_id", insertable=false, updatable=false)
     private Floor floor;
 
-    public Room(int roomId, int floorId, String roomName, String roomType, int capacity) {
-        this.roomId = roomId;
-        this.floorId = floorId;
-        this.roomName = roomName;
+    public Room(Floor floor, String roomNumber, String roomType, int capacity) {
+        this.floor = floor;
+        this.roomNumber = roomNumber;
         this.roomType = roomType;
         this.capacity = capacity;
     }
@@ -47,20 +43,12 @@ public class Room {
         this.roomId = roomId;
     }
 
-    public int getFloorId() {
-        return floorId;
+    public String getRoomNumber() {
+        return roomNumber;
     }
 
-    public void setFloorId(int floorId) {
-        this.floorId = floorId;
-    }
-
-    public String getRoomName() {
-        return roomName;
-    }
-
-    public void setRoomName(String roomName) {
-        this.roomName = roomName;
+    public void setRoomNumber(String roomName) {
+        this.roomNumber = roomNumber;
     }
 
     public String getRoomType() {
@@ -79,12 +67,20 @@ public class Room {
         this.capacity = capacity;
     }
 
+    public Floor getFloor() {
+        return floor;
+    }
+
+    public void setFloor(Floor floor) {
+        this.floor = floor;
+    }
+
     @Override
     public String toString() {
         return "Room{" +
                 "roomId=" + roomId +
-                ", floorId=" + floorId +
-                ", roomName='" + roomName + '\'' +
+                ", floorId=" + floor.getFloorId() +
+                ", roomNumber='" + roomNumber + '\'' +
                 ", roomType='" + roomType + '\'' +
                 ", capacity=" + capacity +
                 '}';
