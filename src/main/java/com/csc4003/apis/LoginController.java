@@ -1,57 +1,124 @@
 package com.csc4003.apis;
 
+import com.csc4003.apis.Services.AttendeeService;
+import com.csc4003.apis.Services.BookingService;
+import com.csc4003.apis.Services.EmployeeService;
 import com.csc4003.apis.models.Employee;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import io.jsonwebtoken.io.*;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import java.security.Key;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 public class LoginController {
 
+    @Autowired
+    private EmployeeService employeeService;
+    @Autowired
+    private BookingService bookingService;
+    @Autowired
+    private AttendeeService attendeeService;
+
     private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     @CrossOrigin
     @RequestMapping(value ="/login", method = RequestMethod.POST)
     public Map<String, String> login(@RequestBody Map<String, Object> json) {
-        if(json.get("email").equals("test123") && json.get("password").equals("test123")) {
+
+        Employee emp = employeeService.findByEmail(json.get("email").toString());
+
+        if(emp != null && emp.getPassword().equals(SHAHash(json.get("password").toString()))) {
             HashMap<String, String> response = new HashMap<>() {
                 {
-                    put("accessToken", generateJWT(json.get("email").toString()));
-                    put("email", json.get("email").toString());
-                    put("name", "Test User");
+                    put("accessToken", generateJWT(emp.getEmail()));
+                    put("email", emp.getEmail());
+                    put("name", emp.getFirstName() + " " + emp.getLastName());
                 }};
             return response;
         }
-        return new HashMap<>();
+        else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Email or Password is incorrect"
+            );
+        }
     }
 
     @CrossOrigin
     @PostMapping("/register")
-    public Employee register() {
-        return new Employee();
+    public Map<String, String> register(@RequestBody Map<String, Object> json) {
+        if(employeeService.findByEmail(json.get("email").toString()) == null) {
+            String[] name = json.get("name").toString().split(" ");
+            Employee emp = new Employee(name[0], name[1], "", json.get("email").toString(), SHAHash(json.get("password").toString()));
+
+            employeeService.addEmployee(emp);
+
+            HashMap<String, String> response = new HashMap<>() {
+                {
+                    put("accessToken", generateJWT(emp.getEmail()));
+                    put("email", emp.getEmail());
+                    put("name", emp.getFirstName() + " " + emp.getLastName());
+                }};
+
+            return response;
+        }
+        else {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Email already tied to a user account"
+            );
+        }
     }
 
     @CrossOrigin
     @RequestMapping(value = "/updateAccount", method = RequestMethod.POST)
     public Map<String, String> updateAccount(@RequestBody Map<String, Object> json, @RequestHeader(HttpHeaders.AUTHORIZATION) String auth ) {
         if(authJWT(auth.split(" ")[1], json.get("email").toString())) {
-            HashMap<String, String> response = new HashMap<>() {
-                {
-                    put("accessToken", auth.split(" ")[1]);
-                    put("email", json.get("email").toString());
-                    put("name", json.get("name").toString());
-                }};
-            return response;
-        }
+            Employee emp = employeeService.findByEmail(json.get("email").toString());
 
-        return new HashMap<>();
+            if(emp != null) {
+                String[] name = json.get("name").toString().split(" ");
+                emp.setFirstName(name[0]);
+                emp.setLastName(name[1]);
+                emp.setEmail(json.get("email").toString());
+
+                if (json.get("password").toString() != "") {
+                    emp.setPassword(SHAHash(json.get("password").toString()));
+                }
+
+                employeeService.updateEmployee(emp);
+
+                HashMap<String, String> response = new HashMap<>() {
+                    {
+                        put("accessToken", generateJWT(emp.getEmail()));
+                        put("email", emp.getEmail());
+                        put("name", emp.getFirstName() + " " + emp.getLastName());
+                    }
+                };
+                return response;
+            }
+            else {
+                throw new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "User does not exist"
+                );
+            }
+        }
+        else {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "JWT Token not valid or missing"
+            );
+        }
     }
 
     private String generateJWT(String email) {
@@ -60,6 +127,24 @@ public class LoginController {
 
     private boolean authJWT(String jwt, String email) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody().getSubject().equals(email);
+    }
+
+    private String SHAHash(String password) {
+        try {
+            MessageDigest message = MessageDigest.getInstance("SHA-512");
+            byte[] digest = message.digest(password.getBytes());
+            BigInteger num = new BigInteger(1, digest);
+            String hash = num.toString(16);
+
+            while(hash.length() < 32) {
+                hash = "0" + hash;
+            }
+
+            return hash;
+        }
+        catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
