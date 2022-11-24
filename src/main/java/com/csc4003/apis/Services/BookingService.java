@@ -2,9 +2,13 @@ package com.csc4003.apis.Services;
 
 import com.csc4003.apis.Repositories.BookingRepository;
 import com.csc4003.apis.models.Booking;
+import com.csc4003.apis.models.Desk;
+import com.csc4003.apis.models.Employee;
+import com.csc4003.apis.models.Room;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,19 +42,19 @@ public class BookingService
         bookingRepository.findById(bookingId);
     }
 
-    public Booking findByEmployeeId(int employeeId) {
-        return bookingRepository.findByEmployeeId(employeeId);
+    public Booking findByEmployee(Employee employee) {
+        return bookingRepository.findByEmployee(employee);
     }
 
-    public List<Booking> findByRoomId(int roomId) {
-        return bookingRepository.findByRoomId(roomId);
+    public List<Booking> findByRoom(Room room) {
+        return bookingRepository.findByRoom(room);
     }
 
-    public List<Booking> findByDeskId(int deskId) {
-        return bookingRepository.findByDeskId(deskId);
+    public List<Booking> findByDesk(Desk desk) {
+        return bookingRepository.findByDesk(desk);
     }
 
-    public String findRoomBookingById(int bookingId) {
-        return bookingRepository.findRoomBookingById(bookingId);
+    public Booking findBookingDetailsById(int bookingId) {
+        return bookingRepository.findBookingDetailsById(bookingId);
     }
 }

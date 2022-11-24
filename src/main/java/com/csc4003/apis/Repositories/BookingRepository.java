@@ -1,7 +1,9 @@
 package com.csc4003.apis.Repositories;
 
 import com.csc4003.apis.models.Booking;
+import com.csc4003.apis.models.Desk;
 import com.csc4003.apis.models.Employee;
+import com.csc4003.apis.models.Room;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -12,41 +14,22 @@ import static org.hibernate.sql.ast.Clause.FROM;
 
 public interface BookingRepository extends CrudRepository<Booking, Integer>
 {
-    Booking findByEmployeeId(int employeeId);
-    List<Booking> findByRoomId(int roomId);
-    List<Booking> findByDeskId(int deskId);
+    Booking findByEmployee(Employee employee);
+    List<Booking> findByRoom(Room room);
+    List<Booking> findByDesk(Desk desk);
 
-    // 2 queries below still need to return attendee list (will be added at a later date)
-    // end time also needs to be added to the queries below (start_time + duration)
-    @Query("SELECT bo.bookingId, r.roomName, r.roomType, f.floorNumber, f.floorName, bu.buildingName, bo.startTime," +
-            "bo.duration FROM Booking bo INNER JOIN bo.room r INNER JOIN r.floor f INNER JOIN f.building bu WHERE bo.bookingId = :bookingId")
-    String findRoomBookingById(int bookingId);
+    @Query("SELECT b FROM Booking b WHERE b.bookingId = :bookingId")
+    Booking findBookingDetailsById(int bookingId);
 
-    @Query("SELECT bo.bookingId, d.deskName, s.spaceName, s.spaceType, f.floorNumber, f.floorName, bu.buildingName, bo.startTime," +
-            "bo.duration FROM Booking bo INNER JOIN bo.desk d INNER JOIN d.space s INNER JOIN s.floor f INNER JOIN f.building bu WHERE bo.bookingId = :bookingId")
-    String findDeskBookingById(int bookingId);
-
-    // few more queries need to be added such as :
-    // --Return all room bookings for room name
-    //      return booking id, room name, room type, floor number, floor name, building name, start time, end time, duration
-    //
-    // --Return all room bookings for floor number
-    //      return booking id, room name, room type, floor number, floor name, building name, start time, end time, duration
-    //
-    // --Return all room bookings for building name
-    //      return booking id, room name, room type, floor number, floor name, building name, start time, end time, duration
-
-    // --Return all desk bookings for desk name
-    //      return booking id, desk name, space name, space type, floor number, floor name, building name, start time, end time, duration
-    //
-    // --Return all desk bookings for space name
-    //      return booking id, desk name, space name, space type, floor number, floor name, building name, start time, end time, duration
-    //
-    // --Return all desk bookings for floor number
-    //      return booking id, desk name, space name, space type, floor number, floor name, building name, start time, end time, duration
-    //
-    // --Return all desk bookings for building name
-    //      return booking id, desk name, space name, space type, floor number, floor name, building name, start time, end time, duration
+    // Not sure if to add these?
+        // Few more queries could be added such as:
+        // -Return all room bookings for room name
+        // -Return all room bookings for floor number
+        // -Return all room bookings for building name
+        // -Return all desk bookings for desk name
+        // -Return all desk bookings for space name
+        // -Return all desk bookings for floor number
+        // -Return all desk bookings for building name
 
 }
 
