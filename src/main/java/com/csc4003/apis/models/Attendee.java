@@ -66,12 +66,8 @@ public class Attendee {
         return employee.getEmployeeId();
     }
 
-    public String getEmployeeFirstName() {
-        return employee.getFirstName();
-    }
-
-    public String getEmployeeLastName() {
-        return employee.getLastName();
+    public String getEmployeeFullName() {
+        return employee.getFullName();
     }
 
     public String getEmployeeOccupation() {

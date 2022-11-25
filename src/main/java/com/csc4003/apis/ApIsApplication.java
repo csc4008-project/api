@@ -36,7 +36,7 @@ public class ApIsApplication {
     public String sayHello(@RequestParam(value = "myName", defaultValue = "World") String name) {
 
         /* ------- Testing adding a new employee to database
-        Employee emp = new Employee(2,"Gary", "Test", "Manager", "JohnDoe@gmail.com", "password");
+        Employee emp = new Employee(2,"Gary Johnson", "Manager", "JohnDoe@gmail.com", "password");
         employeeService.addEmployee(emp);
         */
 
