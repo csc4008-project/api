@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityManager;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,7 +37,7 @@ public class ApIsApplication {
     public String sayHello(@RequestParam(value = "myName", defaultValue = "World") String name) {
 
         /* ------- Testing adding a new employee to database
-        Employee emp = new Employee(2,"Gary", "Test", "Manager", "JohnDoe@gmail.com", "password");
+        Employee emp = new Employee(2,"Gary Johnson", "Manager", "JohnDoe@gmail.com", "password");
         employeeService.addEmployee(emp);
         */
 
@@ -46,6 +47,17 @@ public class ApIsApplication {
 
         // ------- Testing outputting some booking attendee data
         //return attendeeService.findAttendeesByBooking(1).get(0).getEmployeeEmail() + " and + attendeeService.findAttendeesByBooking(1).get(1).getEmployeeEmail();
+
+        // Create timestamp in java
+        //        Timestamp ts = Timestamp.valueOf("2022-11-26 12:20:00");
+
+        // check if start time and duration provided by user conflicts with existing booking
+        //        if (bookingService.findBookingTime(ts, 20) == null) {
+        //            return "Free to book at this time";
+        //        } else {
+        //            return "Cannot book at this time as another booking exists";
+        //        }
+
 
         return String.format("Hello %s!", name);
 

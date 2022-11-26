@@ -10,10 +10,8 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="employee_id")
     private int employeeId;
-    @Column(name="first_name")
-    private String firstName;
-    @Column(name="last_name")
-    private String lastName;
+    @Column(name="full_name")
+    private String fullName;
     @Column(name="occupation")
     private String occupation;
     @Column(name="email")
@@ -21,9 +19,8 @@ public class Employee {
     @Column(name="password")
     private String password;
 
-    public Employee(String firstName, String lastName,  String occupation, String email, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Employee(String fullName, String occupation, String email, String password) {
+        this.fullName = fullName;
         this.occupation = occupation;
         this.email = email;
         this.password = password;
@@ -41,20 +38,12 @@ public class Employee {
         this.employeeId = employeeId;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setFullName(String firstName) {
+        this.fullName = fullName;
     }
 
     public String getEmail() {
@@ -83,7 +72,7 @@ public class Employee {
 
     @Override
     public String toString() {
-        return "Employee: {" + "employeeId=" + employeeId +  ", firstName=" + firstName + ", lastName=" + lastName
+        return "Employee: {" + "employeeId=" + employeeId +  ", fullName=" + fullName
                  +  ", occupation=" + occupation +  ", email=" + email + '}';
     }
 }

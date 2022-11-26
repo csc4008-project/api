@@ -8,24 +8,21 @@ import org.springframework.stereotype.Service;
 import com.csc4003.apis.Repositories.EmployeeRepository;
 
 @Service
-public class EmployeeService
-{
+public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    public List<Employee> getAllEmployees()
-    {
-        List<Employee>employeeRecords = new ArrayList<>();
+    public List<Employee> getAllEmployees() {
+        List<Employee> employeeRecords = new ArrayList<>();
         employeeRepository.findAll().forEach(employeeRecords::add);
         return employeeRecords;
     }
-    public void addEmployee(Employee employee)
-    {
+
+    public void addEmployee(Employee employee) {
         employeeRepository.save(employee);
     }
 
-    public void updateEmployee(Employee employee)
-    {
+    public void updateEmployee(Employee employee) {
         employeeRepository.save(employee);
     }
 
@@ -41,11 +38,8 @@ public class EmployeeService
         return employeeRepository.findByEmail(email);
     }
 
-    public List<Employee> findByFirstName(String firstName) {
-        return employeeRepository.findByFirstName(firstName);
-    }
-
-    public List<Employee> findByLastName(String lastName) {
-        return employeeRepository.findByLastName(lastName);
+    public List<Employee> findByFullName(String fullName) {
+        return employeeRepository.findByFullName(fullName);
     }
 }
+
