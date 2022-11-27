@@ -45,7 +45,7 @@ public class LoginController {
                 {
                     put("accessToken", generateJWT(emp.getEmail()));
                     put("email", emp.getEmail());
-                    put("name", emp.getFirstName() + " " + emp.getLastName());
+                    put("name", emp.getFullName());
                 }};
             return response;
         }
@@ -60,8 +60,8 @@ public class LoginController {
     @PostMapping("/register")
     public Map<String, String> register(@RequestBody Map<String, Object> json) {
         if(employeeService.findByEmail(json.get("email").toString()) == null) {
-            String[] name = json.get("name").toString().split(" ");
-            Employee emp = new Employee(name[0], name[1], "", json.get("email").toString(), SHAHash(json.get("password").toString()));
+
+            Employee emp = new Employee(json.get("name").toString(), "", json.get("email").toString(), SHAHash(json.get("password").toString()));
 
             employeeService.addEmployee(emp);
 
@@ -69,7 +69,7 @@ public class LoginController {
                 {
                     put("accessToken", generateJWT(emp.getEmail()));
                     put("email", emp.getEmail());
-                    put("name", emp.getFirstName() + " " + emp.getLastName());
+                    put("name", emp.getFullName());
                 }};
 
             return response;
@@ -88,9 +88,7 @@ public class LoginController {
             Employee emp = employeeService.findByEmail(json.get("email").toString());
 
             if(emp != null) {
-                String[] name = json.get("name").toString().split(" ");
-                emp.setFirstName(name[0]);
-                emp.setLastName(name[1]);
+                emp.setFullName(json.get("name").toString());
                 emp.setEmail(json.get("email").toString());
 
                 if (json.get("password").toString() != "") {
@@ -103,7 +101,7 @@ public class LoginController {
                     {
                         put("accessToken", generateJWT(emp.getEmail()));
                         put("email", emp.getEmail());
-                        put("name", emp.getFirstName() + " " + emp.getLastName());
+                        put("name", emp.getFullName());
                     }
                 };
                 return response;
