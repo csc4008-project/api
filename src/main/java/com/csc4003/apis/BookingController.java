@@ -19,4 +19,12 @@ public class BookingController {
         return test;
         //return new Booking(bookingId, employeeId, room, deskId, startTime, duration);
     }
+
+    @CrossOrigin
+    @GetMapping("/listBookings")
+    public String listBookings(@RequestParam(value = "userId") String test)
+    {
+        return test;
+        //return new Booking(bookingId, employeeId, room, deskId, startTime, duration);
+    }
 }
