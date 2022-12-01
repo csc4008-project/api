@@ -4,6 +4,7 @@ import com.csc4003.apis.Services.AttendeeService;
 import com.csc4003.apis.Services.BookingService;
 import com.csc4003.apis.Services.EmployeeService;
 import com.csc4003.apis.models.Employee;
+import com.csc4003.apis.JWTAuth;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -43,7 +44,7 @@ public class LoginController {
         if(emp != null && emp.getPassword().equals(SHAHash(json.get("password").toString()))) {
             HashMap<String, String> response = new HashMap<>() {
                 {
-                    put("accessToken", generateJWT(emp.getEmail()));
+                    put("accessToken", JWTAuth.generateJWTWithEmail(emp.getEmail()));
                     put("email", emp.getEmail());
                     put("name", emp.getFullName());
                 }};
@@ -67,7 +68,7 @@ public class LoginController {
 
             HashMap<String, String> response = new HashMap<>() {
                 {
-                    put("accessToken", generateJWT(emp.getEmail()));
+                    put("accessToken", JWTAuth.generateJWTWithEmail(emp.getEmail()));
                     put("email", emp.getEmail());
                     put("name", emp.getFullName());
                 }};
@@ -84,7 +85,7 @@ public class LoginController {
     @CrossOrigin
     @RequestMapping(value = "/updateAccount", method = RequestMethod.POST)
     public Map<String, String> updateAccount(@RequestBody Map<String, Object> json, @RequestHeader(HttpHeaders.AUTHORIZATION) String auth ) {
-        if(authJWT(auth.split(" ")[1], json.get("email").toString())) {
+        if(JWTAuth.authJWT(auth.split(" ")[1])) {
             Employee emp = employeeService.findByEmail(json.get("email").toString());
 
             if(emp != null) {
@@ -99,7 +100,7 @@ public class LoginController {
 
                 HashMap<String, String> response = new HashMap<>() {
                     {
-                        put("accessToken", generateJWT(emp.getEmail()));
+                        put("accessToken", JWTAuth.generateJWTWithEmail(emp.getEmail()));
                         put("email", emp.getEmail());
                         put("name", emp.getFullName());
                     }
@@ -117,14 +118,6 @@ public class LoginController {
                     HttpStatus.UNAUTHORIZED, "JWT Token not valid or missing"
             );
         }
-    }
-
-    private String generateJWT(String email) {
-        return Jwts.builder().setSubject(email).signWith(key).compact();
-    }
-
-    private boolean authJWT(String jwt, String email) {
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody().getSubject().equals(email);
     }
 
     private String SHAHash(String password) {

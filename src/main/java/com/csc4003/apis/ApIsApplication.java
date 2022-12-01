@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityManager;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @SpringBootApplication
 @RestController
@@ -34,32 +32,14 @@ public class ApIsApplication {
         SpringApplication.run(ApIsApplication.class, args);
     }
     @GetMapping("/hello")
-    public String sayHello(@RequestParam(value = "myName", defaultValue = "World") String name) {
+    public Map<String, Object> sayHello() {
 
-        /* ------- Testing adding a new employee to database
-        Employee emp = new Employee(2,"Gary Johnson", "Manager", "JohnDoe@gmail.com", "password");
-        employeeService.addEmployee(emp);
-        */
+        Employee emp = new Employee("Test Name", "Test", "emailtest", "test");
 
-        // ------- Testing outputting some booking data
-        //String buildingName = bookingService.findBookingDetailsById(1).getRoom().getRoomNumber();
-        //return ""+bookingService.findBookingDetailsById(1).getEmployee().getEmployeeId();
+        HashMap<String, Object> test = new HashMap<>();
+        test.put("test", emp);
 
-        // ------- Testing outputting some booking attendee data
-        //return attendeeService.findAttendeesByBooking(1).get(0).getEmployeeEmail() + " and + attendeeService.findAttendeesByBooking(1).get(1).getEmployeeEmail();
-
-        // Create timestamp in java
-        //        Timestamp ts = Timestamp.valueOf("2022-11-26 12:20:00");
-
-        // check if start time and duration provided by user conflicts with existing booking
-        //        if (bookingService.findBookingTime(ts, 20) == null) {
-        //            return "Free to book at this time";
-        //        } else {
-        //            return "Cannot book at this time as another booking exists";
-        //        }
-
-
-        return String.format("Hello %s!", name);
+        return test;
 
     }
 
