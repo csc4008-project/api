@@ -3,10 +3,12 @@ package com.csc4003.apis.Services;
 import com.csc4003.apis.Repositories.BuildingRepository;
 import com.csc4003.apis.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.info.ProjectInfoProperties;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BuildingService {
@@ -34,8 +36,8 @@ public class BuildingService {
         buildingRepository.deleteById(buildingId);
     }
 
-    public void findBuildingById(int buildingId) {
-        buildingRepository.findById(buildingId);
+    public Optional<Building> findBuildingById(int buildingId) {
+        return buildingRepository.findById(buildingId);
     }
 
     public Building findBuildingDetails() {
