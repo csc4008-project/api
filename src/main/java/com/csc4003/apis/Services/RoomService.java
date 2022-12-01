@@ -39,12 +39,17 @@ public class RoomService {
         roomRepository.findById(roomId);
     }
 
-    public Floor findByFloor(Floor floor) {
+    public Room findByFloor(Floor floor) {
         return roomRepository.findByFloor(floor);
     }
 
     public Room findRoomDetails() {
         return roomRepository.findRoomDetails();
     }
-    
+
+    // return list of rooms for floor
+    public List<Room> findRoomsByFloor(Floor floor) {
+        return roomRepository.findRoomsByFloor(floor);
+    }
+
 }

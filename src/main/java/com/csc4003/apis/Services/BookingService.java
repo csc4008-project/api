@@ -8,7 +8,6 @@ import com.csc4003.apis.models.Room;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,4 +61,10 @@ public class BookingService
     public Booking findBookingTime(Timestamp bookingTime, int duration) {
         return bookingRepository.findBookingTime(bookingTime, duration);
     }
+
+    // list of bookings employee has created
+    public List<Booking> findAllBookingsByEmployee(Employee employee) {
+        return bookingRepository.findAllBookingsByEmployee(employee);
+    }
+
 }

@@ -10,9 +10,6 @@ import org.springframework.data.repository.CrudRepository;
 import java.sql.Timestamp;
 import java.util.List;
 
-import static org.hibernate.loader.Loader.SELECT;
-import static org.hibernate.sql.ast.Clause.FROM;
-
 public interface BookingRepository extends CrudRepository<Booking, Integer>
 {
     Booking findByEmployee(Employee employee);
@@ -26,15 +23,8 @@ public interface BookingRepository extends CrudRepository<Booking, Integer>
             "OR (DATE_ADD(:bookingTime, INTERVAL :duration MINUTE) BETWEEN start_time AND DATE_ADD(start_time, INTERVAL duration MINUTE))", nativeQuery = true)
     Booking findBookingTime(Timestamp bookingTime, int duration);
 
-    // Not sure if to add these?
-        // Few more queries could be added such as:
-        // -Return all room bookings for room name
-        // -Return all room bookings for floor number
-        // -Return all room bookings for building name
-        // -Return all desk bookings for desk name
-        // -Return all desk bookings for space name
-        // -Return all desk bookings for floor number
-        // -Return all desk bookings for building name
+    List<Booking> findAllBookingsByEmployee(Employee employee);
+
 
 }
 

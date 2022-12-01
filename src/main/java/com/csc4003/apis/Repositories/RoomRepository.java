@@ -5,11 +5,15 @@ import com.csc4003.apis.models.Floor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
+
 public interface RoomRepository extends CrudRepository<Room, Integer> {
 
-    Floor findByFloor(Floor floor);
+    Room findByFloor(Floor floor);
 
     @Query("SELECT r FROM Room r")
     Room findRoomDetails();
+
+    List<Room> findRoomsByFloor(Floor floor);
     
 }

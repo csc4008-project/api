@@ -39,12 +39,17 @@ public class DeskService {
         deskRepository.findById(deskId);
     }
 
-    public Space findBySpace(Space space) {
+    public Desk findBySpace(Space space) {
         return deskRepository.findBySpace(space);
     }
 
     public Desk findDeskDetails() {
         return deskRepository.findDeskDetails();
+    }
+
+    // return desks for space
+    public List<Desk> findDesksBySpace(Space space) {
+        return deskRepository.findDesksBySpace(space);
     }
     
 }
