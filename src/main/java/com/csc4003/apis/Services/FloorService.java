@@ -39,11 +39,17 @@ public class FloorService {
         floorRepository.findById(floorId);
     }
 
-    public Building findByBuilding(Building building) {
+    public Floor findByBuilding(Building building) {
         return floorRepository.findByBuilding(building);
     }
 
     public Floor findFloorDetails() {
         return floorRepository.findFloorDetails();
     }
+
+    // floor list for building
+    public List<Floor> findFloorsByBuilding(Building building) {
+        return floorRepository.findFloorsByBuilding(building);
+    }
+
 }

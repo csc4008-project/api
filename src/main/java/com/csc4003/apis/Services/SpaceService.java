@@ -39,12 +39,17 @@ public class SpaceService {
         spaceRepository.findById(spaceId);
     }
 
-    public Floor findByFloor(Floor floor) {
+    public Space findByFloor(Floor floor) {
         return spaceRepository.findByFloor(floor);
     }
 
     public Space findSpaceDetails() {
         return spaceRepository.findSpaceDetails();
     }
-    
+
+    // pass in floor id return spaces for that floor
+    public List<Space> findSpacesByFloor(Floor floor) {
+        return spaceRepository.findSpacesByFloor(floor);
+    }
+
 }
