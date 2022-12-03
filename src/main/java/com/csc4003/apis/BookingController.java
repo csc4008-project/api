@@ -43,7 +43,7 @@ public class BookingController {
 
     @CrossOrigin
     @GetMapping("/listBookings")
-    public Map<String, Object> listBookings(@RequestBody Map<String, Object> json, @RequestHeader(HttpHeaders.AUTHORIZATION) String auth) {
+    public Map<String, Object> listBookings(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth) {
         if(JWTAuth.authJWT(auth.split(" ")[1])) {
             Employee emp = employeeService.findByEmail(JWTAuth.getEmailFromJWT(auth.split(" ")[1]));
             List<Booking> bookings = bookingService.findAllBookingsByEmployee(emp);

@@ -42,7 +42,7 @@ public class Employee {
         return fullName;
     }
 
-    public void setFullName(String firstName) {
+    public void setFullName(String fullName) {
         this.fullName = fullName;
     }
 

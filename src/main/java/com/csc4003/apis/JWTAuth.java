@@ -15,12 +15,7 @@ public class JWTAuth {
         return Jwts.builder().setSubject("auth").signWith(key).compact();
     }
     public static String generateJWTWithEmail(String email) {
-        HashMap<String, String> emailClaim = new HashMap<>() {
-            {
-                put("email", email);
-            }
-        };
-        return Jwts.builder().setSubject(email).setSubject("auth").setClaims(emailClaim).signWith(key).compact();
+        return Jwts.builder().setSubject("auth").claim("email", email).signWith(key).compact();
     }
 
     public static boolean authJWT(String jwt) {
@@ -32,6 +27,6 @@ public class JWTAuth {
     }
 
     public static String getEmailFromJWT(String jwt) {
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJwt(jwt).getBody().get("email").toString();
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody().get("email").toString();
     }
 }
