@@ -14,7 +14,7 @@ public class Floor {
     @Column(name="floor_number")
     private int floorNumber;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "building_id", insertable=false, updatable=false)
     private Building building;
 

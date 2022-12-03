@@ -20,7 +20,7 @@ public class Space {
     @Column(name="desk_capacity")
     private int deskCapacity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "floor_id", insertable=false, updatable=false)
     private Floor floor;
 
