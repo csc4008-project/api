@@ -62,6 +62,7 @@ public class BookingController {
 
                 bookingJson.put("start_time", booking.getStartTime().toString());
                 bookingJson.put("duration", booking.getDuration());
+                bookingJson.put("attendees", attendeeService.findAttendeesByBooking(booking.getBookingId()));
                 bookingJson.put("room", booking.getRoom());
                 bookingJson.put("desk", booking.getDesk());
                 bookingJson.put("employee", booking.getEmployee());
