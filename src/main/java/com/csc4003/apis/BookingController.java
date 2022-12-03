@@ -45,9 +45,8 @@ public class BookingController {
     @GetMapping("/listBookings")
     public Map<String, Object> listBookings(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth) {
         if(JWTAuth.authJWT(auth.split(" ")[1])) {
-            //Employee emp = employeeService.findByEmail(JWTAuth.getEmailFromJWT(auth.split(" ")[1]));
+            Employee emp = employeeService.findByEmail(JWTAuth.getEmailFromJWT(auth.split(" ")[1]));
 
-            Employee emp = employeeService.findByEmail("dylan@largecorp.com");
             List<Booking> bookings = bookingService.findAllBookingsByEmployee(emp);
 
             List<Attendee> attendees = attendeeService.findAttendedBookingsByEmployee(emp);
