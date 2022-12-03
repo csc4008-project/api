@@ -108,7 +108,7 @@ public class BookingController {
 
     @CrossOrigin
     @RequestMapping(value = "/findBuildings", method = RequestMethod.GET)
-    public Map<String, Object> findBuildings(@RequestBody Map<String, Object> json, @RequestHeader(HttpHeaders.AUTHORIZATION) String auth) {
+    public Map<String, Object> findBuildings(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth) {
         if(JWTAuth.authJWT(auth.split(" ")[1])) {
             List<Building> buildings = buildingService.getAllBuildings();
 
