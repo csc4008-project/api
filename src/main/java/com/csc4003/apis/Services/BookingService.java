@@ -58,8 +58,12 @@ public class BookingService
         return bookingRepository.findBookingDetailsById(bookingId);
     }
 
-    public Booking findBookingTime(Timestamp bookingTime, int duration) {
-        return bookingRepository.findBookingTime(bookingTime, duration);
+    public Booking findBookingTimeRoom(Timestamp bookingTime, int duration, int roomId) {
+        return bookingRepository.findBookingTimeRoom(bookingTime, duration, roomId);
+    }
+
+    public Booking findBookingTimeDesk(Timestamp bookingTime, int duration, int deskId) {
+        return bookingRepository.findBookingTimeDesk(bookingTime, duration, deskId);
     }
 
     // list of bookings employee has created

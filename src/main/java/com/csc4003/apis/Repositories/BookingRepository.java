@@ -20,8 +20,12 @@ public interface BookingRepository extends CrudRepository<Booking, Integer>
     Booking findBookingDetailsById(int bookingId);
 
     @Query(value = "SELECT * FROM booking WHERE (:bookingTime BETWEEN start_time AND DATE_ADD(start_time, INTERVAL duration MINUTE)) " +
-            "OR (DATE_ADD(:bookingTime, INTERVAL :duration MINUTE) BETWEEN start_time AND DATE_ADD(start_time, INTERVAL duration MINUTE))", nativeQuery = true)
-    Booking findBookingTime(Timestamp bookingTime, int duration);
+            "OR (DATE_ADD(:bookingTime, INTERVAL :duration MINUTE) BETWEEN start_time AND DATE_ADD(start_time, INTERVAL duration MINUTE)) AND room_id = :roomId", nativeQuery = true)
+    Booking findBookingTimeRoom(Timestamp bookingTime, int duration, int roomId);
+
+    @Query(value = "SELECT * FROM booking WHERE (:bookingTime BETWEEN start_time AND DATE_ADD(start_time, INTERVAL duration MINUTE)) " +
+            "OR (DATE_ADD(:bookingTime, INTERVAL :duration MINUTE) BETWEEN start_time AND DATE_ADD(start_time, INTERVAL duration MINUTE)) AND desk_id = :deskId", nativeQuery = true)
+    Booking findBookingTimeDesk(Timestamp bookingTime, int duration, int deskId);
 
     List<Booking> findAllBookingsByEmployee(Employee employee);
 
