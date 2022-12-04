@@ -21,7 +21,7 @@ public class Room {
     private int capacity;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "floor_id", insertable=false, updatable=false)
+    @JoinColumn(name = "floor_id", insertable=true, updatable=true)
     private Floor floor;
 
     public Room(Floor floor, String roomNumber, String roomType, int capacity) {

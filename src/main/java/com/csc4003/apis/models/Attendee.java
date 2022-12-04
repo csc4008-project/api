@@ -7,16 +7,16 @@ import java.sql.Timestamp;
 @Table(name="attendee")
 public class Attendee {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="attendee_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int attendeeId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "booking_id", insertable=false, updatable=false)
+    @JoinColumn(name = "booking_id", insertable=true, updatable=true)
     private Booking booking;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employee_id", insertable=false, updatable=false)
+    @JoinColumn(name = "employee_id", insertable=true, updatable=true)
     private Employee employee;
 
     public Attendee(Booking booking, Employee employee) {

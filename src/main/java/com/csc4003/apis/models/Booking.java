@@ -10,27 +10,27 @@ import java.sql.Timestamp;
 public class Booking {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="booking_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int bookingId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id", insertable=true, updatable=true)
+    private Employee employee;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id", insertable=true, updatable=true)
+    private Room room;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "desk_id", insertable=true, updatable=true)
+    private Desk desk;
 
     @Column(name="start_time")
     private java.sql.Timestamp startTime;
 
     @Column(name="duration")
     private int duration;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id", insertable=false, updatable=false)
-    private Room room;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "desk_id", insertable=false, updatable=false)
-    private Desk desk;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employee_id", insertable=false, updatable=false)
-    private Employee employee;
 
     public Booking(Employee employee, Room room, Desk desk, java.sql.Timestamp startTime, int duration) {
         this.employee = employee;

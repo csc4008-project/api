@@ -15,7 +15,7 @@ public class Floor {
     private int floorNumber;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "building_id", insertable=false, updatable=false)
+    @JoinColumn(name = "building_id", insertable=true, updatable=true)
     private Building building;
 
     public Floor(Building building, int floorNumber) {

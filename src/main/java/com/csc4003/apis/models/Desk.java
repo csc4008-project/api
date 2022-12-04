@@ -15,7 +15,7 @@ public class Desk {
     private String deskName;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "space_id", insertable=false, updatable=false)
+    @JoinColumn(name = "space_id", insertable=true, updatable=true)
     private Space space;
 
     public Desk(Space space, String deskName) {
