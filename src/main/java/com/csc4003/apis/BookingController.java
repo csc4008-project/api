@@ -265,8 +265,13 @@ public class BookingController {
 
                     }
 
+                    bookingService.addBooking(booking);
+
+                    List<Booking> allBookings = bookingService.getAllBookings();
+
+                    Booking currentBooking = allBookings.get(allBookings.size()-1);
                     for (String id : attendeeIDs) {
-                        Attendee at = new Attendee(booking, employeeService.findEmployeeById(Integer.parseInt(id)).get());
+                        Attendee at = new Attendee(currentBooking, employeeService.findEmployeeById(Integer.parseInt(id)).get());
                         attendeeService.addAttendee(at);
                     }
                 }
@@ -288,8 +293,13 @@ public class BookingController {
 
                     }
 
+                    bookingService.addBooking(booking);
+
+                    List<Booking> allBookings = bookingService.getAllBookings();
+
+                    Booking currentBooking = allBookings.get(allBookings.size()-1);
                     for (String id : attendeeIDs) {
-                        Attendee at = new Attendee(booking, employeeService.findEmployeeById(Integer.parseInt(id)).get());
+                        Attendee at = new Attendee(currentBooking, employeeService.findEmployeeById(Integer.parseInt(id)).get());
                         attendeeService.addAttendee(at);
                     }
                 }
