@@ -14,16 +14,14 @@ public class JWTAuth {
     private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     public static String generateJWT() {
-        Date dt = new Date();
-        LocalDateTime.from(dt.toInstant()).plusDays(1);
+        Date d = new Date(new Date().getTime() + 86400000);
 
-        return Jwts.builder().setSubject("auth").setExpiration(dt).signWith(key).compact();
+        return Jwts.builder().setSubject("auth").setExpiration(d).signWith(key).compact();
     }
     public static String generateJWTWithEmail(String email) {
-        Date dt = new Date();
-        LocalDateTime.from(dt.toInstant()).plusDays(1);
+        Date d = new Date(new Date().getTime() + 86400000);
 
-        return Jwts.builder().setSubject("auth").claim("email", email).setExpiration(dt).signWith(key).compact();
+        return Jwts.builder().setSubject("auth").claim("email", email).setExpiration(d).signWith(key).compact();
     }
 
     public static boolean authJWT(String jwt) {

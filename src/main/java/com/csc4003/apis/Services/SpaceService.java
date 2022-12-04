@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SpaceService {
@@ -35,8 +36,8 @@ public class SpaceService {
         spaceRepository.deleteById(spaceId);
     }
 
-    public void findSpaceById(int spaceId) {
-        spaceRepository.findById(spaceId);
+    public Optional<Space> findSpaceById(int spaceId) {
+        return spaceRepository.findById(spaceId);
     }
 
     public Space findByFloor(Floor floor) {
