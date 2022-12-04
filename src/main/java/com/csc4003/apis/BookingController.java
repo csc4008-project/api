@@ -253,39 +253,126 @@ public class BookingController {
         if(JWTAuth.authJWT(auth.split(" ")[1])) {
             Employee emp = employeeService.findByEmail(JWTAuth.getEmailFromJWT(auth.split(" ")[1]));
             if(json.get("desk_id") != null) {
-                Booking booking = new Booking(emp, null, deskService.findDeskById(Integer.parseInt(json.get("desk_id").toString())).get(), Timestamp.valueOf(json.get("start").toString()), Integer.parseInt(json.get("duration").toString()));
+                Booking timeslot = bookingService.findBookingTimeDesk(Timestamp.valueOf(json.get("start").toString()), Integer.parseInt(json.get("duration").toString()), Integer.parseInt(json.get("desk_id").toString()));
+                if(timeslot == null) {
+                    Booking booking = new Booking(emp, null, deskService.findDeskById(Integer.parseInt(json.get("desk_id").toString())).get(), Timestamp.valueOf(json.get("start").toString()), Integer.parseInt(json.get("duration").toString()));
 
-                ObjectMapper objectMapper = new ObjectMapper();
-                List<Employee> attendees = new ArrayList<>();
-                try {
-                    attendees = Arrays.asList(objectMapper.readValue(json.get("attendees").toString(), Employee[].class));
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    List<String> attendeeIDs = new ArrayList<>();
+                    try {
+                        attendeeIDs = Arrays.asList(objectMapper.readValue(json.get("attendees").toString(), String[].class));
+                    } catch (Exception e) {
+
+                    }
+
+                    bookingService.addBooking(booking);
+
+                    List<Booking> allBookings = bookingService.getAllBookings();
+
+                    Booking currentBooking = allBookings.get(allBookings.size()-1);
+                    for (String id : attendeeIDs) {
+                        Attendee at = new Attendee(currentBooking, employeeService.findEmployeeById(Integer.parseInt(id)).get());
+                        attendeeService.addAttendee(at);
+                    }
                 }
-                catch (Exception e) {
-
-                }
-
-                for(Employee att : attendees) {
-                    Attendee at = new Attendee(booking, att);
-                    attendeeService.addAttendee(at);
+                else {
+                    throw new ResponseStatusException(
+                            HttpStatus.BAD_REQUEST, "Booking already exists at date/time"
+                    );
                 }
             } else if (json.get("room_id") != null) {
-                Booking booking = new Booking(emp, roomService.findRoomById(Integer.parseInt(json.get("room_id").toString())).get(), null, Timestamp.valueOf(json.get("start").toString()), Integer.parseInt(json.get("duration").toString()));
 
-                ObjectMapper objectMapper = new ObjectMapper();
-                List<Employee> attendees = new ArrayList<>();
-                try {
-                    attendees = Arrays.asList(objectMapper.readValue(json.get("attendees").toString(), Employee[].class));
+                Booking timeslot = bookingService.findBookingTimeRoom(Timestamp.valueOf(json.get("start").toString()), Integer.parseInt(json.get("duration").toString()), Integer.parseInt(json.get("room_id").toString()));
+                if(timeslot == null) {
+                    Booking booking = new Booking(emp, roomService.findRoomById(Integer.parseInt(json.get("room_id").toString())).get(), null, Timestamp.valueOf(json.get("start").toString()), Integer.parseInt(json.get("duration").toString()));
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    List<String> attendeeIDs = new ArrayList<>();
+                    try {
+                        attendeeIDs = Arrays.asList(objectMapper.readValue(json.get("attendees").toString(), String[].class));
+                    } catch (Exception e) {
+
+                    }
+
+                    bookingService.addBooking(booking);
+
+                    List<Booking> allBookings = bookingService.getAllBookings();
+
+                    Booking currentBooking = allBookings.get(allBookings.size()-1);
+                    for (String id : attendeeIDs) {
+                        Attendee at = new Attendee(currentBooking, employeeService.findEmployeeById(Integer.parseInt(id)).get());
+                        attendeeService.addAttendee(at);
+                    }
                 }
-                catch (Exception e) {
-
-                }
-
-                for(Employee att : attendees) {
-                    Attendee at = new Attendee(booking, att);
-                    attendeeService.addAttendee(at);
+                else {
+                    throw new ResponseStatusException(
+                            HttpStatus.BAD_REQUEST, "Booking already exists at date/time"
+                    );
                 }
             }
            return ResponseEntity.ok("Booking successfully created");
+        }
+        else {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "User is not authorised to make API calls"
+            );
+        }
+    }
+
+    @CrossOrigin
+    @RequestMapping(value ="/listDesks", method = RequestMethod.POST)
+    public Map<String, Object> listDesks(@RequestBody Map<String, Object> json, @RequestHeader(HttpHeaders.AUTHORIZATION) String auth) {
+        if(JWTAuth.authJWT(auth.split(" ")[1])) {
+            Space space = spaceService.findSpaceById(Integer.parseInt(json.get("space_id").toString())).get();
+            List<Desk> desks = deskService.findDesksBySpace(space);
+
+            HashMap<String, Object> outerIDMap = new HashMap<>();
+
+            for(Desk desk : desks) {
+                HashMap<String, Object> deskJson = new HashMap<>();
+
+                deskJson.put("deskName", desk.getDeskName());
+                deskJson.put("space", desk.getSpace());
+
+                outerIDMap.put(Integer.toString(desk.getDeskId()), deskJson);
+            }
+
+            HashMap<String, Object> outerWrapper = new HashMap<>();
+
+            outerWrapper.put("desks", outerIDMap);
+
+            return outerWrapper;
+        }
+        else {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "User is not authorised to make API calls"
+            );
+        }
+    }
+
+    @CrossOrigin
+    @RequestMapping(value = "/listEmployees", method = RequestMethod.GET)
+    public Map<String, Object> listEmployees(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth) {
+        if(JWTAuth.authJWT(auth.split(" ")[1])) {
+            List<Employee> employees = employeeService.getAllEmployees();
+
+            HashMap<String, Object> outerIDMap = new HashMap<>();
+
+            for(Employee employee : employees) {
+                HashMap<String, Object> employeeJson = new HashMap<>();
+
+                employeeJson.put("fullName", employee.getFullName());
+                employeeJson.put("occupation", employee.getOccupation());
+                employeeJson.put("email", employee.getEmail());
+                employeeJson.put("password", employee.getPassword());
+
+                outerIDMap.put(Integer.toString(employee.getEmployeeId()), employeeJson);
+            }
+
+            HashMap<String, Object> outerWrapper = new HashMap<>();
+
+            outerWrapper.put("employees", outerIDMap);
+
+            return outerWrapper;
         }
         else {
             throw new ResponseStatusException(
