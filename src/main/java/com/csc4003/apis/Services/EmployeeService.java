@@ -2,6 +2,8 @@ package com.csc4003.apis.Services;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Optional;
+
 import com.csc4003.apis.models.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,8 +32,8 @@ public class EmployeeService {
         employeeRepository.deleteById(employeeId);
     }
 
-    public void findEmployeeById(int employeeId) {
-        employeeRepository.findById(employeeId);
+    public Optional<Employee> findEmployeeById(int employeeId) {
+        return employeeRepository.findById(employeeId);
     }
 
     public Employee findByEmail(String email) {

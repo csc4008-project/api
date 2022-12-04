@@ -46,12 +46,11 @@ public class BookingController {
     public Map<String, Object> listBookings(@RequestHeader(HttpHeaders.AUTHORIZATION) String auth) {
         if(JWTAuth.authJWT(auth.split(" ")[1])) {
             Employee emp = employeeService.findByEmail(JWTAuth.getEmailFromJWT(auth.split(" ")[1]));
-
             List<Booking> bookings = bookingService.findAllBookingsByEmployee(emp);
 
-            List<Attendee> attendees = attendeeService.findAttendedBookingsByEmployee(emp);
+            List<Attendee> attended = attendeeService.findAttendedBookingsByEmployee(emp);
 
-            for(Attendee att : attendees) {
+            for(Attendee att : attended) {
                 bookings.add(att.getBooking());
             }
 
@@ -60,9 +59,15 @@ public class BookingController {
             for(Booking booking: bookings) {
                 HashMap<String, Object> bookingJson = new HashMap<>();
 
+                List<Attendee> returnObjects = attendeeService.findAttendeesByBooking(booking.getBookingId());
+                List<Employee> attendees = new ArrayList<>();
+                for(Attendee tt : returnObjects) {
+                    attendees.add(tt.getEmployee());
+                }
+
                 bookingJson.put("start_time", booking.getStartTime().toString());
                 bookingJson.put("duration", booking.getDuration());
-                bookingJson.put("attendees", attendeeService.findAttendeesByBooking(booking.getBookingId()));
+                bookingJson.put("attendees", attendees)     ;
                 bookingJson.put("room", booking.getRoom());
                 bookingJson.put("desk", booking.getDesk());
                 bookingJson.put("employee", booking.getEmployee());

@@ -3,6 +3,7 @@ package com.csc4003.apis;
 import com.csc4003.apis.Services.AttendeeService;
 import com.csc4003.apis.Services.BookingService;
 import com.csc4003.apis.Services.BuildingService;
+import com.csc4003.apis.models.Attendee;
 import com.csc4003.apis.models.Booking;
 import com.csc4003.apis.models.Building;
 import com.csc4003.apis.models.Employee;
@@ -37,26 +38,29 @@ public class ApIsApplication {
         SpringApplication.run(ApIsApplication.class, args);
     }
     @GetMapping("/hello")
-    public Map<String, Object> sayHello() {
+    public void sayHello() {
 
-        Employee emp = new Employee("Test Name", "Test", "emailtest", "test");
-        Building building = buildingService.findBuildingById(1).get();
+//        Employee emp = new Employee("Test Name", "Test", "emailtest", "test");
+//        Building building = buildingService.findBuildingById(1).get();
+//
+//        ObjectMapper mapper = new ObjectMapper();
+//        List<Integer> json = new ArrayList<>();
+//        String testArray = "[1,2,3,4,5]";
+//        try {
+//            json = Arrays.asList(mapper.readValue(testArray, Integer[].class));
+//        }
+//        catch (Exception e) {
+//
+//        }
+//        HashMap<String, Object> test = new HashMap<>();
+//        test.put("Super Title Test", "Test Data");
+//        test.put("test", json);
 
-        ObjectMapper mapper = new ObjectMapper();
-        List<Integer> json = new ArrayList<>();
-        String testArray = "[1,2,3,4,5]";
-        try {
-            json = Arrays.asList(mapper.readValue(testArray, Integer[].class));
-        }
-        catch (Exception e) {
-
-        }
-        HashMap<String, Object> test = new HashMap<>();
-        test.put("Super Title Test", "Test Data");
-        test.put("test", json);
-
-        return test;
-
+//        String test = "Test" + null;
+//        Booking booking = bookingService.findBookingDetailsById(1);
+//        Employee employee = employeeService.findEmployeeById(1).get();
+//        Attendee att = new Attendee(booking, employee);
+//        attendeeService.addAttendee(att);
     }
 
 }

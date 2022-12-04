@@ -94,8 +94,15 @@ public class Booking {
 
     @Override
     public String toString() {
-        return "Booking: {" + "bookingId=" + bookingId +  ", employeeId=" + employee.getEmployeeId() + ", roomId=" + room.getRoomId()
-                +  ", deskId=" + desk.getDeskId() +  ", startTime=" + startTime + ", duration=" + duration +'}';
+
+        if(desk != null) {
+            return "Booking: {" + "bookingId=" + bookingId + ", employeeId=" + employee.getEmployeeId() + ", roomId=null"
+                    + ", deskId=" + desk.getDeskId() + ", startTime=" + startTime + ", duration=" + duration + '}';
+        }
+        else {
+            return "Booking: {" + "bookingId=" + bookingId + ", employeeId=" + employee.getEmployeeId() + ", roomId=" + room.getRoomId()
+                    + ", deskId=null"  + ", startTime=" + startTime + ", duration=" + duration + '}';
+        }
     }
 
     // ---- Room Details Methods
