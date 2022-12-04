@@ -89,12 +89,12 @@ public class BookingController {
     }
 
     @CrossOrigin
-    @RequestMapping(value = "/deleteBooking", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/deleteBooking", method = RequestMethod.POST)
     public ResponseEntity deleteBooking(@RequestBody Map<String, Object> json, @RequestHeader(HttpHeaders.AUTHORIZATION) String auth) {
         if(JWTAuth.authJWT(auth.split(" ")[1])) {
             Booking booking = bookingService.findBookingDetailsById(Integer.parseInt(json.get("booking_id").toString()));
 
-            if(booking.getEmployeeEmail().equals(JWTAuth.getEmailFromJWT(auth))) {
+            if(booking.getEmployeeEmail().equals(JWTAuth.getEmailFromJWT(auth.split(" ")[1]))) {
                 bookingService.deleteBookingById(Integer.parseInt(json.get("booking_id").toString()));
 
                 return ResponseEntity.ok("Booking successfully deleted");
