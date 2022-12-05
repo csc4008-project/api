@@ -150,7 +150,7 @@ public class BookingController {
     }
 
     @CrossOrigin
-    @RequestMapping(value = "/findFloors", method = RequestMethod.GET)
+    @RequestMapping(value = "/findFloors", method = RequestMethod.POST)
     public Map<String, Object> findFloors(@RequestBody Map<String, Object> json, @RequestHeader(HttpHeaders.AUTHORIZATION) String auth) {
         if(JWTAuth.authJWT(auth.split(" ")[1])) {
 
@@ -181,7 +181,7 @@ public class BookingController {
     }
 
     @CrossOrigin
-    @GetMapping("/listSpaces")
+    @RequestMapping(value ="/listSpaces", method=RequestMethod.POST)
     public Map<String, Object> listSpaces(@RequestBody Map<String, Object> json, @RequestHeader(HttpHeaders.AUTHORIZATION) String auth) {
         if(JWTAuth.authJWT(auth.split(" ")[1])) {
             Floor floor = floorService.findFloorById(Integer.parseInt(json.get("floor_id").toString())).get();
@@ -214,7 +214,7 @@ public class BookingController {
     }
 
     @CrossOrigin
-    @GetMapping("/listRooms")
+    @RequestMapping(value ="/listRooms", method=RequestMethod.POST)
     public Map<String, Object> listRooms(@RequestBody Map<String, Object> json, @RequestHeader(HttpHeaders.AUTHORIZATION) String auth) {
         if(JWTAuth.authJWT(auth.split(" ")[1])) {
             Floor floor = floorService.findFloorById(Integer.parseInt(json.get("floor_id").toString())).get();
