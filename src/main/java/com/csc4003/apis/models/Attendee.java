@@ -11,7 +11,7 @@ public class Attendee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int attendeeId;
 
-    @ManyToOne(cascade=CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booking_id", insertable=true, updatable=true)
     private Booking booking;
 

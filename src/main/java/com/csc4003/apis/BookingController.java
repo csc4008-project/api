@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.awt.print.Book;
 import java.sql.Timestamp;
 import java.util.*;
@@ -67,7 +68,7 @@ public class BookingController {
 
                 bookingJson.put("start_time", booking.getStartTime().toString());
                 bookingJson.put("duration", booking.getDuration());
-                bookingJson.put("attendees", attendees)     ;
+                bookingJson.put("attendees", attendees);
                 bookingJson.put("room", booking.getRoom());
                 bookingJson.put("desk", booking.getDesk());
                 bookingJson.put("employee", booking.getEmployee());
@@ -94,17 +95,16 @@ public class BookingController {
         if(JWTAuth.authJWT(auth.split(" ")[1])) {
             Booking booking = bookingService.findBookingDetailsById(Integer.parseInt(json.get("booking_id").toString()));
 
-            if(booking.getEmployeeEmail().equals(JWTAuth.getEmailFromJWT(auth.split(" ")[1]))) {
-                bookingService.deleteBookingById(Integer.parseInt(json.get("booking_id").toString()));
+            List<Attendee> attendees = attendeeService.findAttendeesByBooking(Integer.parseInt(json.get("booking_id").toString()));
 
-                return ResponseEntity.ok("Booking successfully deleted");
+            for(Attendee att : attendees) {
+                attendeeService.deleteAttendeeById(att.getAttendeeId());
             }
 
-            else {
-                throw new ResponseStatusException(
-                        HttpStatus.UNAUTHORIZED, "User did not create this booking"
-                );
-            }
+            bookingService.deleteBookingById(Integer.parseInt(json.get("booking_id").toString()));
+
+            return ResponseEntity.ok("Booking successfully deleted");
+
         }
         else {
             throw new ResponseStatusException(
@@ -150,7 +150,7 @@ public class BookingController {
     }
 
     @CrossOrigin
-    @RequestMapping(value = "/findFloors", method = RequestMethod.POST)
+    @RequestMapping(value = "/findFloors", method = RequestMethod.GET)
     public Map<String, Object> findFloors(@RequestBody Map<String, Object> json, @RequestHeader(HttpHeaders.AUTHORIZATION) String auth) {
         if(JWTAuth.authJWT(auth.split(" ")[1])) {
 
@@ -181,7 +181,7 @@ public class BookingController {
     }
 
     @CrossOrigin
-    @RequestMapping( value = "/listSpaces", method = RequestMethod.POST)
+    @GetMapping("/listSpaces")
     public Map<String, Object> listSpaces(@RequestBody Map<String, Object> json, @RequestHeader(HttpHeaders.AUTHORIZATION) String auth) {
         if(JWTAuth.authJWT(auth.split(" ")[1])) {
             Floor floor = floorService.findFloorById(Integer.parseInt(json.get("floor_id").toString())).get();
@@ -214,7 +214,7 @@ public class BookingController {
     }
 
     @CrossOrigin
-    @RequestMapping(value = "/listRooms", method = RequestMethod.POST)
+    @GetMapping("/listRooms")
     public Map<String, Object> listRooms(@RequestBody Map<String, Object> json, @RequestHeader(HttpHeaders.AUTHORIZATION) String auth) {
         if(JWTAuth.authJWT(auth.split(" ")[1])) {
             Floor floor = floorService.findFloorById(Integer.parseInt(json.get("floor_id").toString())).get();
@@ -373,6 +373,40 @@ public class BookingController {
             outerWrapper.put("employees", outerIDMap);
 
             return outerWrapper;
+        }
+        else {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "User is not authorised to make API calls"
+            );
+        }
+    }
+
+    @CrossOrigin
+    @RequestMapping(value = "/changeAttendees", method = RequestMethod.POST)
+    public ResponseEntity changeAttendees(@RequestBody Map<String, Object> json, @RequestHeader(HttpHeaders.AUTHORIZATION) String auth) {
+        if(JWTAuth.authJWT(auth.split(" ")[1])) {
+
+            Booking booking = bookingService.findBookingDetailsById(Integer.parseInt(json.get("booking_id").toString()));
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<String> attendeeIDs = new ArrayList<>();
+            try {
+                attendeeIDs = Arrays.asList(objectMapper.readValue(json.get("attendees").toString(), String[].class));
+            } catch (Exception e) {
+
+            }
+
+            List<Attendee> bookingAttendees = attendeeService.findAttendeesByBooking(Integer.parseInt(json.get("booking_id").toString()));
+
+            for(Attendee att : bookingAttendees) {
+                attendeeService.deleteAttendeeById(att.getAttendeeId());
+            }
+            for(String id : attendeeIDs) {
+                Employee emp = employeeService.findEmployeeById(Integer.parseInt(id)).get();
+                Attendee att = new Attendee(booking, emp);
+                attendeeService.addAttendee(att);
+            }
+
+            return ResponseEntity.ok("Booking successfully created");
         }
         else {
             throw new ResponseStatusException(
